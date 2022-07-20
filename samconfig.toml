@@ -1,0 +1,15 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "rust-graphql-sam-sample"
+s3_bucket = "rust-graphql-sam-sample"
+s3_prefix = "rust-graphql-sam-sample"
+region = "ap-northeast-1"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = """
+SsmName="/rust-graphql-sam-sample/server/env" \
+DomainName="rust-graphql-sam-sample.akiho.app" \
+HostedZoneName="akiho.app." \
+CertificateArn="arn:aws:acm:ap-northeast-1:326914400610:certificate/xxxx"
+"""

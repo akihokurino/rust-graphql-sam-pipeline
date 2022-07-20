@@ -1,0 +1,20 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+app = { path = "../app" }
+actix-cors = "0.6.1"
+actix-web = "4.1.0"
+async-graphql = { version = "4.0.5", features = ["dataloader", "log"] }
+async-graphql-actix-web = "4.0.5"
+async-graphql-value = "4.0.5"
+lambda-web = { version = "0.2.0", features = ["actix4"] }
+serde_json = "1.0.82"
+serde = "1.0.139"
+async-trait = "0.1.56"
+convert_case = "0.5.0"
+strum_macros = "0.24.2"

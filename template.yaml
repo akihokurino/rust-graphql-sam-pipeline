@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  rust-graphql-sam-sample
+Globals:
+  Function:
+    Timeout: 5
+
+Parameters:
+  SsmName:
+    Type: String
+  DomainName:
+    Type: String
+  HostedZoneName:
+    Type: String
+  CertificateArn:
+    Type: String
+
+Resources:
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: bootstrap.is.real.handler
+      Runtime: provided.al2
+      MemorySize: 128
+      Tracing: Active
+      Events:
+        ProxyApiRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /
+            Method: ANY
+        ProxyApiGreedy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: ANY
+      Environment:
+        Variables:
+          SSM_PARAMETER: !Ref SsmName
+          WITH_LAMBDA: true
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonCognitoPowerUser
+        - AmazonSSMReadOnlyAccess
+        - AmazonS3FullAccess
+    Metadata:
+      BuildMethod: makefile
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: default
+      BinaryMediaTypes:
+        - "*/*"
+      Domain:
+        EndpointConfiguration: REGIONAL
+        DomainName: !Ref DomainName
+        Route53:
+          HostedZoneName: !Ref HostedZoneName
+        CertificateArn: !Ref CertificateArn

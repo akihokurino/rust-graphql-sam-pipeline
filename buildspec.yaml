@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands: []
+  pre_build:
+    commands:
+      - if [ -n "$DOCKER_CONFIG_BODY" ]; then echo "DOCKER_CONFIG_BODY detected. expand to ~/.docker/config.json" && mkdir -p ~/.docker && echo "$DOCKER_CONFIG_BODY" > ~/.docker/config.json ; fi
+      - mkdir -p target .docker/cache/cargo
+      - chown -RL 1000:1000 . target .docker/cache
+  build:
+    commands:
+      - make USE_DOCKER=1 USE_DOCKER_CACHE=1 DOCKER_EXTRA_PARAMS="-v $(pwd)/target:/home/rust/src/target" STRIP=1 deploy
+  post_build:
+    commands: []
+cache:
+  paths:
+    - .docker/cache/**/*
+    - target/**/*
