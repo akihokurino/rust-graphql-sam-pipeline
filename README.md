@@ -1,4 +1,4 @@
-## Specs
+## Used, Dependency
 - rust 1.62.0
 - actix-web 4（ https://actix.rs/ ）
 - async-graphql（ https://github.com/async-graphql/async-graphql ）
